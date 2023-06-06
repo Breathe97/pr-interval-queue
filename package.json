@@ -1,16 +1,32 @@
 {
   "name": "pr-interval-queue",
-  "version": "1.0.3",
-  "description": "一个全局的事件队列，使用一个计时器然后根据时间线队列来帮助你实现一些方法的重复调用。",
-  "main": "index.js",
+  "version": "1.0.6",
+  "description": "一个简单的全局事件循环队列",
+  "private": false,
   "type": "module",
-  "ts-node": {
-    "esm": true
-  },
   "scripts": {
-    "test": "node test.js"
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
   },
-  "author": "Breathe",
-  "license": "ISC",
-  "types": "./index.d.ts"
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/pr-interval-queue.umd.js",
+  "module": "./dist/pr-interval-queue.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/pr-interval-queue.es.js",
+      "require": "./dist/pr-interval-queue.umd.js"
+    }
+  },
+  "dependencies": {
+    "vue": "^3.2.47"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.1.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.2",
+    "vue-tsc": "^1.4.2"
+  }
 }

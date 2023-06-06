@@ -1,0 +1,8 @@
+{
+	"proseWrap": "never",
+	"printWidth": 480,
+	"useTabs": false,
+	"tabWidth": 2,
+	"semi": false,
+	"singleQuote": true
+}  
