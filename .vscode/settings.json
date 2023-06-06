@@ -1,0 +1,86 @@
+{
+    // ----------------------- 个人常用
+    // 颜色主题
+    // "workbench.colorTheme": "Monokai",
+    // // 文件夹图标
+    // "workbench.iconTheme": "material-icon-theme",
+    // // 关闭git警告 (不用vscoed的git插件 用不来)
+    // "git.ignoreMissingGitWarning": true,
+    // // 打开编辑器 命令行控制台
+    // "window.commandCenter": true,
+    // // 删除文件时不需要确认
+    // "explorer.confirmDelete": false,
+    // // 重命名js文件时 自动更新引入
+    // "javascript.updateImportsOnFileMove.enabled": "always",
+    // // 重命名ts文件时 自动更新引入
+    // "typescript.updateImportsOnFileMove.enabled": "always",
+    // // 不受信任的文件也可以直接打开
+    // "security.workspace.trust.untrustedFiles": "open",
+    // // 打开多个文件的时候 不会关闭之前打开的文件
+    // "workbench.editor.enablePreview": false,
+    // // 提交的时候默认直接暂存所有
+    // "git.enableSmartCommit": true,
+    // // 同步的时候不用确认
+    // "git.confirmSync": false,
+  
+    // ----------------------- 通用建议
+    // 制表符为2个空格
+    "editor.tabSize": 2,
+    // 去除dom中函数括号里面的提示 $event=>
+    "editor.inlayHints.enabled": "off",
+    // 显示建议的时候每次都是选择第一个建议
+    "editor.suggestSelection": "first",
+    // 为false的时候 选择一个提示之后继续写会继续提示你（比如写css行内样式的时候）
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    // 开启后在下面设置建议列表中的顺序
+    "emmet.showSuggestionsAsSnippets": true,
+    // 不要还不行  设置置顶自定义代码片段
+    "editor.snippetSuggestions": "inline",
+    // 去掉中横线分割字符（双击短横线可以选中整个单词）
+    "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?",
+    // 自动补全的时候取消补全分号 因为行内style首次补全 光标总是会落到分号后面（去你妈的 什么玩意儿 难受）
+    "css.completion.completePropertyWithSemicolon": false,
+    // 既然scss取消了 那less也取消吧
+    "scss.completion.completePropertyWithSemicolon": false,
+    // 既然css取消了 那less也取消吧
+    "less.completion.completePropertyWithSemicolon": false,
+    // 对.env 增加语言识别
+    "files.associations": { ".env.*": "properties" },
+    // 不换行
+    "prettier.proseWrap": "never",
+    // 换行字节数
+    "prettier.printWidth": 480,
+    // 换行不使用tab，使用空格
+    "prettier.useTabs": false,
+    // 句尾添加分号
+    "prettier.semi": false,
+    // 使用单引号代替双引号
+    "prettier.singleQuote": true,
+  
+    // ----------------------- 其他语言选择格式化选择prettier
+    "[html]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[css]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[scss]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[vue]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+  }
+  
