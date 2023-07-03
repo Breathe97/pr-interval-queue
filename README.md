@@ -2,6 +2,10 @@
 
 ## 使用方法
 
+```bash
+npm i pr-interval-queue
+```
+
 #### 按需引入
 
 ```js
