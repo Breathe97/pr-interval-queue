@@ -1,6 +1,6 @@
 {
   "name": "pr-interval-queue",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "一个全局的事件队列，使用一个计时器然后根据时间线队列来帮助你实现一些方法的重复调用。",
   "type": "module",
   "main": "./src/index.js",
