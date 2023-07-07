@@ -3,6 +3,33 @@
 const queue = [] // 事件队列 执行安装从右往左执行，右侧事件执行完成时候会删除 然后插入到左侧重新等待下一次执行
 let debug = false
 
+// 随机生成uuid
+export const uuid = (len = 16, radix = 16) => {
+  let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
+  let uuid = [],
+    i
+  radix = radix || chars.length
+  if (len) {
+    // Compact form
+    for (i = 0; i < len; i++) uuid[i] = chars[0 | (Math.random() * radix)]
+  } else {
+    // rfc4122, version 4 form
+    let r
+    // rfc4122 requires these characters
+    uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-'
+    uuid[14] = '4'
+    // Fill in random data.  At i==19 set the high bits of clock sequence as
+    // per rfc4122, sec. 4.1.5
+    for (i = 0; i < 36; i++) {
+      if (!uuid[i]) {
+        r = 0 | (Math.random() * 16)
+        uuid[i] = chars[i == 19 ? (r & 0x3) | 0x8 : r]
+      }
+    }
+  }
+  return uuid.join('')
+}
+
 // 移除事件
 export const removeQueueItem = (keys = []) => {
   // console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:keys`, keys)
@@ -17,11 +44,13 @@ export const removeQueueItem = (keys = []) => {
 
 // 添加事件
 export const addQueueItem = (funInfo, clear = true) => {
-  let { interval, key, func } = funInfo || {}
+  let { interval, key, func, execution_time } = funInfo || {}
   // 通过time生成执行时间
-  const execution_time = new Date().getTime() + Number(interval)
+  if (!execution_time) {
+    execution_time = new Date().getTime() + Number(interval)
+  }
   if (!key) {
-    key = `${execution_time}`
+    key = `${execution_time}-${uuid(4, 16)}`
   }
   // 主要为了 循环调用的时候不清除 因为直接获取到当前index 在内部清理 不需要查询
   if (clear) {
@@ -58,7 +87,7 @@ export const startQueue = (interval = 1000, _debug = false) => {
     let length = queue.length
     for (let i = length; i > 0; i--) {
       const info = queue[i - 1]
-      const { execution_time = 0, func } = info
+      const { interval, execution_time = 0, func, key } = info
       // 执行事件距离当前时间大于间隔时间时表示 没有可执行的队列 直接跳出循环
       const isBreak = execution_time - now > 0
       if (debug) {
@@ -69,7 +98,8 @@ export const startQueue = (interval = 1000, _debug = false) => {
       func()
       // 执行完了之后 把当前事件移动到队列最左侧
       queue.splice(i - 1, 1)
-      addQueueItem(info, false)
+      const funInfo = { interval, key, func }
+      addQueueItem(funInfo, false)
     }
   }, interval)
   return timer

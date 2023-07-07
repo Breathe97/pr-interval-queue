@@ -5,10 +5,12 @@ interface FunInfo {
   execution_time?: number // 激活时间（当现实时间达到该值附近时就会执行,如果设置一个未来时间 就会在未来这个时间再次激活轮询）
 }
 
+declare function uuid(len?: number, radix?: number): string
+
 declare function removeQueueItem(keys: string[]): void
 
 declare function addQueueItem(funInfo: FunInfo, clear?: boolean): number
 
 declare function startQueue(interval?: number, debug?: boolean): number
 
-export { removeQueueItem, addQueueItem, startQueue }
+export { uuid, removeQueueItem, addQueueItem, startQueue }
