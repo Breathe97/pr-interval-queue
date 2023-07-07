@@ -47,6 +47,17 @@ const func = () => {}
 addQueueItem({ func, interval: 6000, key: 'ccc-6', execution_time: new Date().getTime() + 1000 * 60 * 60 * 24 * 1 })
 ```
 
+#### 移除事件
+
+```js
+// 需要执行的函数
+const func = () => {}
+
+// 保存添加后的key 如果不指定key，会随机生成一个并返回
+const key = addQueueItem({ func, interval: 3000 })
+removeQueueItem([key])
+```
+
 ## 代码仓库
 
 [github](https://github.com/breathe97/pr-interval-queue)
