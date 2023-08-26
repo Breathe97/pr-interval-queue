@@ -32,7 +32,9 @@ startQueue(1000, true) // 一秒检查一次 开启调试
 let aaa = () => {
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:执行aaa`)
 }
-// addQueueItem({ func: aaa, interval: 10000 })
+addQueueItem({ func: aaa, interval: 3000 })
+
+removeQueueItem(['dddd']) // 移除一个不存在的时间
 
 let bbb = () => {
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:执行bbb`)

@@ -1,4 +1,4 @@
-// 时间线 从左往右 越来越小 <---------------------执行3---<---执行2---<---执行1-----当前时间
+// 时间线 从左往右 越来越小,例如： <---------------------执行3---<---执行2---<---执行1-----当前时间
 
 const queue = [] // 事件队列 执行安装从右往左执行，右侧事件执行完成时候会删除 然后插入到左侧重新等待下一次执行
 let debug = false
@@ -32,12 +32,18 @@ export const uuid = (len = 16, radix = 16) => {
 
 // 移除事件
 export const removeQueueItem = (keys = []) => {
+  // 兼容单个字符串
+  if (typeof keys === 'string') {
+    keys = [keys]
+  }
   // console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:keys`, keys)
   for (const key of keys) {
     let index = queue.findIndex((item) => item.key === key)
-    queue.splice(index, 1)
-    if (debug) {
-      console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:移除事件`, key)
+    if (index !== -1) {
+      queue.splice(index, 1)
+      if (debug) {
+        console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:移除事件`, key)
+      }
     }
   }
 }
@@ -64,7 +70,6 @@ export const addQueueItem = (funInfo, clear = true) => {
   // 根据execution_time 把info插入到队列
   const info = { key, execution_time, interval, func }
   let index = queue.findIndex((item) => execution_time >= item.execution_time) // 查找比当前大的时间点
-  // console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:index`, index, index2)
   index = index === -1 ? queue.length : index // 如果是-1 表示没有比他小的 此时插入到最右侧在时间线最前面
   queue.splice(index, 0, info) // 插入到数组中
   if (debug) {
