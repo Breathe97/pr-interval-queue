@@ -1,5 +1,5 @@
-// import { removeQueueItem, addQueueItem, startQueue } from 'pr-interval-queue'
-import { removeQueueItem, addQueueItem, startQueue } from '../dist/index.js'
+import { removeQueueItem, addQueueItem, startQueue } from 'pr-interval-queue'
+// import { removeQueueItem, addQueueItem, startQueue } from '../dist/index.js'
 import { timeFormat } from 'pr-tools'
 
 // 下面是模拟事件情况

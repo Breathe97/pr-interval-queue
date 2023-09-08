@@ -36,6 +36,7 @@
     "url": "仓库地址"
   },
   "dependencies": {
+    "pr-interval-queue": "^1.0.14",
     "pr-tools": "^1.0.4"
   }
 }
