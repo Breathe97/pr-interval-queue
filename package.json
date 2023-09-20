@@ -1,6 +1,6 @@
 {
   "name": "pr-interval-queue",
-  "version": "1.0.14",
+  "version": "1.0.16",
   "description": "一个全局的事件队列，使用一个计时器然后根据时间线队列来帮助你实现一些方法的重复调用。",
   "type": "module",
   "files": [
@@ -37,8 +37,5 @@
     "type": "git",
     "url": "仓库地址"
   },
-  "dependencies": {
-    "pr-interval-queue": "^1.0.16",
-    "pr-tools": "^1.0.4"
-  }
+  "dependencies": {}
 }
