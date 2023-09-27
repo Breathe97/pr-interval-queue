@@ -21,6 +21,10 @@
     "build:dts": "tsc && vite build && npx -p typescript tsc lib/index.js --declaration --allowJs --emitDeclarationOnly --outDir dist",
     "preview": "vite preview"
   },
+  "dependencies": {
+    "pr-interval-queue": "^1.1.0",
+    "pr-tools": "^1.0.8"
+  },
   "devDependencies": {
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
@@ -36,9 +40,5 @@
   "repository": {
     "type": "git",
     "url": "仓库地址"
-  },
-  "dependencies": {
-    "pr-interval-queue": "^1.0.16",
-    "pr-tools": "^1.0.4"
   }
 }

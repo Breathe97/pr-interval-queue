@@ -1,10 +1,11 @@
-import { removeQueueItem, addQueueItem, startQueue } from 'pr-interval-queue'
+// import { removeQueueItem, addQueueItem, startQueue } from '../../src/index.js'
 // import { removeQueueItem, addQueueItem, startQueue } from '../dist/index.js'
+import { removeQueueItem, addQueueItem, startQueue } from 'pr-interval-queue'
 import { timeFormat } from 'pr-tools'
 
-// 下面是模拟事件情况
-
 startQueue(1000, true) // 一秒检查一次 开启调试
+
+// 下面是模拟事件情况
 let aaa = () => {
   console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:执行aaa`)
 }

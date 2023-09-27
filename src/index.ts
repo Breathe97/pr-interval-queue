@@ -1,8 +1,7 @@
+type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never
 interface QueueItem {
   func: Function // 执行的函数
   interval: number // 执行的间隔时间
-  // key?: string // 事件唯一key 清除时使用
-  // execution_time?: number // 激活时间（当现实时间达到该值附近时就会执行,如果设置一个未来时间 就会在未来这个时间再次激活轮询）
 }
 
 interface InsideQueueItem extends QueueItem {
@@ -16,7 +15,7 @@ export interface OutsideQueueItem extends QueueItem {
 }
 
 // 时间线 从左往右 越来越小,例如： <---------------------执行3---<---执行2---<---执行1-----当前时间
-const queue: InsideQueueItem[] = [] // 事件队列 执行安装从右往左执行，右侧事件执行完成时候会删除 然后插入到左侧重新等待下一次执行
+const queue: Expand<InsideQueueItem>[] = [] // 事件队列 执行安装从右往左执行，右侧事件执行完成时候会删除 然后插入到左侧重新等待下一次执行
 let debug = false
 
 // 随机生成uuid
@@ -46,7 +45,10 @@ const uuid = (len = 16, radix = 16) => {
   return uuid.join('')
 }
 
-// 移除事件
+/**
+ * 移除事件
+ * @param {Array} keys 需要移除的事件
+ */
 export const removeQueueItem = (keys: string[] = []) => {
   // 兼容单个字符串
   if (typeof keys === 'string') {
@@ -64,8 +66,8 @@ export const removeQueueItem = (keys: string[] = []) => {
   }
 }
 
-// 添加事件
-export const addQueueItem = (queueItem: OutsideQueueItem, clear = true) => {
+// 内置方法
+const _addQueueItem = (queueItem: Expand<OutsideQueueItem>, clear = true) => {
   let { interval = 10000, key, func = () => {}, execution_time = 0 } = queueItem || {}
   // 通过time生成执行时间
   if (!execution_time) {
@@ -100,8 +102,21 @@ export const addQueueItem = (queueItem: OutsideQueueItem, clear = true) => {
   }
   return key
 }
+/**
+ * 添加事件
+ * @param {Object} queueItem 单个事件信息
+ * @returns {String} 事件的key
+ */
+export const addQueueItem = (queueItem: Expand<OutsideQueueItem>) => {
+  return _addQueueItem(queueItem)
+}
 
-// 开启轮询队列监听
+/**
+ * 开启轮询队列监听
+ * @param {Number} interval 循环检测周期 ms
+ * @param {Boolean} _debug 是否开始调试
+ * @returns {Number} 创建时的计时器序列
+ */
 export const startQueue = (interval = 1000, _debug = false) => {
   debug = _debug // 是否开启调试
   const timer = setInterval(() => {
@@ -121,7 +136,7 @@ export const startQueue = (interval = 1000, _debug = false) => {
       // 执行完了之后 把当前事件移动到队列最左侧
       queue.splice(i - 1, 1)
       const funInfo = { interval, key, func }
-      addQueueItem(funInfo, false)
+      _addQueueItem(funInfo, false)
     }
   }, interval)
   return timer
