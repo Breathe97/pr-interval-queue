@@ -1,3 +1,5 @@
+import { uuid } from 'pr-tools'
+
 type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never
 interface QueueItem {
   func: Function // 执行的函数
@@ -17,33 +19,6 @@ export interface OutsideQueueItem extends QueueItem {
 // 时间线 从左往右 越来越小,例如： <---------------------执行3---<---执行2---<---执行1-----当前时间
 const queue: Expand<InsideQueueItem>[] = [] // 事件队列 执行安装从右往左执行，右侧事件执行完成时候会删除 然后插入到左侧重新等待下一次执行
 let debug = false
-
-// 随机生成uuid
-const uuid = (len = 16, radix = 16) => {
-  let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
-  let uuid = [],
-    i
-  radix = radix || chars.length
-  if (len) {
-    // Compact form
-    for (i = 0; i < len; i++) uuid[i] = chars[0 | (Math.random() * radix)]
-  } else {
-    // rfc4122, version 4 form
-    let r
-    // rfc4122 requires these characters
-    uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-'
-    uuid[14] = '4'
-    // Fill in random data.  At i==19 set the high bits of clock sequence as
-    // per rfc4122, sec. 4.1.5
-    for (i = 0; i < 36; i++) {
-      if (!uuid[i]) {
-        r = 0 | (Math.random() * 16)
-        uuid[i] = chars[i == 19 ? (r & 0x3) | 0x8 : r]
-      }
-    }
-  }
-  return uuid.join('')
-}
 
 /**
  * 移除事件

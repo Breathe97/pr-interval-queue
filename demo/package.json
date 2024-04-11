@@ -1,44 +1,20 @@
 {
-  "name": "pr-interval-queue",
-  "version": "1.0.14",
-  "description": "一个全局的事件队列，使用一个计时器然后根据时间线队列来帮助你实现一些方法的重复调用。",
+  "name": "demo",
+  "private": true,
+  "version": "0.0.0",
   "type": "module",
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/index.umd.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.umd.cjs"
-    }
-  },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "build:dts": "tsc && vite build && npx -p typescript tsc lib/index.js --declaration --allowJs --emitDeclarationOnly --outDir dist",
+    "build": "vue-tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "pr-interval-queue": "^1.1.0",
-    "pr-tools": "^1.0.8"
+    "vue": "^3.4.21"
   },
   "devDependencies": {
-    "typescript": "^5.0.2",
-    "vite": "^4.4.5",
-    "vite-plugin-dts": "^3.5.3"
-  },
-  "private": false,
-  "author": "Breathe",
-  "keywords": [
-    "pr-interval-queue",
-    "事件队列",
-    "计时器"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "仓库地址"
+    "@vitejs/plugin-vue": "^5.0.4",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0",
+    "vue-tsc": "^2.0.6"
   }
 }

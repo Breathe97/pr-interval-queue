@@ -16,12 +16,11 @@
     }
   },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "build:dts": "tsc && vite build && npx -p typescript tsc lib/index.js --declaration --allowJs --emitDeclarationOnly --outDir dist",
-    "preview": "vite preview"
+    "build": "tsc && vite build"
   },
-  "dependencies": {},
+  "dependencies": {
+    "pr-tools": "^1.0.9"
+  },
   "devDependencies": {
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
