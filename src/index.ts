@@ -67,13 +67,7 @@ const _addQueueItem = (queueItem: Expand<OutsideQueueItem>, clear = true) => {
   const info = { key, execution_time, interval, func }
   queue.splice(index, 0, info) // 插入到数组中
   if (debug) {
-    console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:插入事件`, key, execution_time, index)
-    let _arr = Array.from(queue, (item) => item.execution_time)
-    let _arr2 = Array.from(queue, (item) => item.execution_time).sort((a, b) => b - a)
-    let _arr3 = Array.from(queue, (item) => item.key)
-    console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:队列keys`, JSON.stringify(_arr3))
-    console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:时间线${_arr.length}`, JSON.stringify(_arr) === JSON.stringify(_arr2) ? '正常' : '异常', JSON.stringify(_arr))
-    console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:---------------------------------`)
+    console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:插入事件`, key, `执行时间: ${execution_time}`, `队列位置: ${index}`)
   }
   return key
 }
@@ -103,7 +97,13 @@ export const startQueue = (interval = 1000, _debug = false) => {
       // 执行事件距离当前时间大于间隔时间时表示 没有可执行的队列 直接跳出循环
       const isBreak = execution_time - now > 0
       if (debug) {
-        console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:队列循环`, isBreak, (execution_time - now) / 1000, JSON.stringify(info))
+        console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:队列循环---------------------------------`)
+        let _arr = Array.from(queue, (item) => item.execution_time)
+        let _arr2 = Array.from(queue, (item) => item.execution_time).sort((a, b) => b - a)
+        let _arr3 = Array.from(queue, (item) => item.key)
+        console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:队列keys`, JSON.stringify(_arr3))
+        console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:时间线${_arr.length}`, JSON.stringify(_arr) === JSON.stringify(_arr2) ? '正常' : '异常', JSON.stringify(_arr))
+        console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:`, `当前${isBreak ? ' 无 ' : ' 有 '}任务`, `最近任务剩余${(execution_time - now) / 1000}s`, `任务详情：${JSON.stringify(info)}`)
       }
       if (isBreak) break
       // 需要执行当前事件
@@ -111,10 +111,11 @@ export const startQueue = (interval = 1000, _debug = false) => {
       // 执行完了之后 把当前事件移动到队列最左侧
       queue.splice(i - 1, 1)
       const funInfo = { interval, key, func }
-      if (interval > 0) {
-        _addQueueItem(funInfo, false)
-        removeQueueItem([funInfo.key])
+      // 如果 interval 为0 表示只执行一次 直接清除
+      if (interval === 0) {
+        return removeQueueItem([funInfo.key])
       }
+      _addQueueItem(funInfo, false)
     }
   }, interval)
   return timer
