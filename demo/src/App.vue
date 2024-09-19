@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
 
-// import { removeQueueItem, addQueueItem, startQueue } from '../../src/index.js'
-import { removeQueueItem, addQueueItem, startQueue } from '../../dist/index.js'
+import { removeQueueItem, addQueueItem, startQueue } from '../../src/index.js'
+// import { removeQueueItem, addQueueItem, startQueue } from '../../dist/index.js'
 // import { removeQueueItem, addQueueItem, startQueue } from 'pr-interval-queue'
 import { timeFormat } from 'pr-tools'
 

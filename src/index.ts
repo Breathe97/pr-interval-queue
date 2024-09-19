@@ -111,7 +111,10 @@ export const startQueue = (interval = 1000, _debug = false) => {
       // 执行完了之后 把当前事件移动到队列最左侧
       queue.splice(i - 1, 1)
       const funInfo = { interval, key, func }
-      _addQueueItem(funInfo, false)
+      if (interval > 0) {
+        _addQueueItem(funInfo, false)
+        removeQueueItem([funInfo.key])
+      }
     }
   }, interval)
   return timer
