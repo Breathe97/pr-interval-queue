@@ -37,14 +37,13 @@ const func = () => {}
 addQueueItem({ func, interval: 3000, key: 'bbb-3' })
 ```
 
-#### 在未来添加一个循环事件
+#### 在未来添加一个事件不循环
 
 ```js
 // 需要执行的函数
 const func = () => {}
 
-// 给一天后添加一个每6000ms的循环事件
-addQueueItem({ func, interval: 6000, key: 'ccc-6', execution_time: new Date().getTime() + 1000 * 60 * 60 * 24 * 1 })
+addQueueItem({ func, interval: 0, key: 'ccc-6', execution_time: new Date().getTime() + 1000 * 60 * 60 * 24 * 1 })
 ```
 
 #### 移除事件
