@@ -60,7 +60,7 @@ export class Queue {
    * @param queueItem 单个事件信息
    * @returns 事件的key
    */
-  addQueueItem = (queueItem: QueueItem, clear = true) => {
+  addQueueItem = (queueItem: QueueItem) => {
     const { key = uuid(), execution_time: _execution_time = this.#now, interval = 10000, func = () => {} } = queueItem
 
     this.removeQueueItem([key]) // 尝试删除可能存在的任务
