@@ -60,7 +60,7 @@ export class Queue {
    * @param queueItem 单个事件信息
    * @returns 事件的key
    */
-  addQueueItem = (queueItem: QueueItem) => {
+  addQueueItem = (queueItem: Partial<QueueItem> & { func: Function }) => {
     const { key = uuid(), execution_time: _execution_time = this.#now, interval = 10000, func = () => {} } = queueItem
 
     this.removeQueueItem([key]) // 尝试删除可能存在的任务
@@ -88,27 +88,31 @@ export class Queue {
       const nextQueueItem = this.#queue[this.#queue.length - 1]
       const { key, interval = 0, execution_time = 0, func } = nextQueueItem
 
-      if (this.#debug) {
-        // 如果队列中有最近的任务
-        if (nextQueueItem) {
-          const _arr = Array.from(this.#queue, (item) => item.execution_time)
-          const _arr2 = Array.from(this.#queue, (item) => item.execution_time).sort((a, b) => b - a)
-          const _arr3 = Array.from(this.#queue, (item) => item.key)
-          console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:队列keys`, JSON.stringify(_arr3))
-          const isErr = JSON.stringify(_arr) !== JSON.stringify(_arr2)
-          if (isErr) {
-            console.error('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:时间线${_arr.length}`, '异常', JSON.stringify(_arr))
-          }
-          const surplus = (execution_time - this.#now) / 1000
-          console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:`, `当前 有 任务`, `最近任务 ${timeFormat(execution_time)} 剩余${surplus}s`, `任务详情：${JSON.stringify(nextQueueItem)}`)
-        } else {
+      const surplus = Math.round((execution_time - this.#now) / 1000)
+
+      if (!nextQueueItem) {
+        if (this.#debug) {
           console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:`, `当前 无 任务`)
         }
+        break
+      }
+
+      // 如果队列中有最近的任务
+      if (this.#debug) {
+        const _arr = Array.from(this.#queue, (item) => item.execution_time)
+        const _arr2 = Array.from(this.#queue, (item) => item.execution_time).sort((a, b) => b - a)
+        const _arr3 = Array.from(this.#queue, (item) => item.key)
+        console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:队列keys`, JSON.stringify(_arr3))
+        const isErr = JSON.stringify(_arr) !== JSON.stringify(_arr2)
+        if (isErr) {
+          console.error('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:时间线${_arr.length}`, '异常', JSON.stringify(_arr))
+        }
+        console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:`, `当前 有 任务`, `最近任务 ${timeFormat(execution_time)} 剩余${surplus}s`, `任务详情：${JSON.stringify(nextQueueItem)}`)
       }
 
       // 执行事件距离当前时间大于间隔时间时表示 没有可执行的队列 直接跳出循环
-      const isBreak = execution_time - this.#now > 0
-      if (isBreak) break
+      if (surplus > 0) break
+
       // 需要执行当前事件
       func()
       // 如果 interval 为0 表示只执行一次 直接清除
@@ -127,9 +131,7 @@ export class Queue {
    * @returns 创建时的计时器序列
    */
   startQueue = () => {
-    const timer = setInterval(() => {
-      this.#checkQueue()
-    }, this.#interval)
+    const timer = setInterval(this.#checkQueue, this.#interval)
     return timer
   }
 }
