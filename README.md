@@ -9,13 +9,13 @@ npm i pr-interval-queue
 #### 按需引入
 
 ```js
-import { removeQueueItem, addQueueItem, startQueue } from 'pr-interval-queue'
+import { PrIntervalQueue } from 'pr-interval-queue'
 ```
 
 #### main.js 中开启队列
 
 ```js
-const queue = new Queue(1000, true) // 一秒检查一次 开启调试
+const queue = new PrIntervalQueue(1000, true) // 一秒检查一次 开启调试
 
 queue.startQueue()
 ```

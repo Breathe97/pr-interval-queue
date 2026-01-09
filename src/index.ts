@@ -1,1 +1,1 @@
-export { PrIntervalQueue } from './APrIntervalQueue'
+export { PrIntervalQueue } from './PrIntervalQueue'
