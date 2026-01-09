@@ -22,7 +22,7 @@ interface QueueItem {
   func: Function
 }
 
-export class Queue {
+export class prIntervalQueue {
   #debug = false // 是否开启调试
   #queue: QueueItem[] = [] // 事件队列 执行安装从右往左执行，右侧事件执行完成时候会删除 然后插入到左侧重新等待下一次执行
   #interval = 1000 // 循环时间
