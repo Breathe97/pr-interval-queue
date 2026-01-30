@@ -23,10 +23,10 @@ interface QueueItem {
 }
 
 export class PrIntervalQueue {
-  #debug = false // 是否开启调试
-  #queue: QueueItem[] = [] // 事件队列 执行安装从右往左执行，右侧事件执行完成时候会删除 然后插入到左侧重新等待下一次执行
-  #interval = 1000 // 循环时间
-  #now = Date.now() // 当前时间
+  _debug = false // 是否开启调试
+  _queue: QueueItem[] = [] // 事件队列 执行安装从右往左执行，右侧事件执行完成时候会删除 然后插入到左侧重新等待下一次执行
+  _interval = 1000 // 循环时间
+  _now = Date.now() // 当前时间
 
   /**
    *
@@ -34,8 +34,8 @@ export class PrIntervalQueue {
    * @param _debug 是否开启调试模式 默认为 false
    */
   constructor(_interval = 1000, _debug = false) {
-    this.#interval = _interval
-    this.#debug = _debug
+    this._interval = _interval
+    this._debug = _debug
   }
 
   /**
@@ -45,10 +45,10 @@ export class PrIntervalQueue {
   removeQueueItem = (keys: string[] = []) => {
     // console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:keys`, keys)
     for (const key of keys) {
-      const index = this.#queue.findIndex((item) => item.key === key)
+      const index = this._queue.findIndex((item) => item.key === key)
       if (index !== -1) {
-        this.#queue.splice(index, 1)
-        if (this.#debug) {
+        this._queue.splice(index, 1)
+        if (this._debug) {
           console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:移除事件`, key)
         }
       }
@@ -61,7 +61,7 @@ export class PrIntervalQueue {
    * @returns 事件的key
    */
   addQueueItem = (queueItem: Partial<QueueItem> & { func: Function }) => {
-    const { key = uuid(), execution_time: _execution_time = this.#now, interval = 10000, func = () => {} } = queueItem
+    const { key = uuid(), execution_time: _execution_time = this._now, interval = 10000, func = () => {} } = queueItem
 
     this.removeQueueItem([key]) // 尝试删除可能存在的任务
 
@@ -69,12 +69,12 @@ export class PrIntervalQueue {
     const execution_time = _execution_time + Number(interval)
 
     // 根据 execution_time 把info插入到队列
-    let index = this.#queue.findIndex((item) => execution_time >= item.execution_time) // 查找比当前大的时间点
-    index = index === -1 ? this.#queue.length : index // 如果是-1 表示没有比他小的 此时插入到最右侧在时间线最前面
+    let index = this._queue.findIndex((item) => execution_time >= item.execution_time) // 查找比当前大的时间点
+    index = index === -1 ? this._queue.length : index // 如果是-1 表示没有比他小的 此时插入到最右侧在时间线最前面
     const newQueueItem = { key, execution_time, interval, func }
-    this.#queue.splice(index, 0, newQueueItem) // 插入到数组中
+    this._queue.splice(index, 0, newQueueItem) // 插入到数组中
 
-    if (this.#debug) {
+    if (this._debug) {
       console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:插入事件`, key, `执行时间: ${timeFormat(execution_time)}`, `队列位置: ${index}`)
     }
     return key
@@ -82,26 +82,26 @@ export class PrIntervalQueue {
 
   // 检查队列是否有需要执行的任务
   #checkQueue = () => {
-    this.#now = Date.now() // 当前时间
-    const length = this.#queue.length
+    this._now = Date.now() // 当前时间
+    const length = this._queue.length
     for (let i = length; i > 0; i--) {
-      const nextQueueItem = this.#queue[this.#queue.length - 1]
+      const nextQueueItem = this._queue[this._queue.length - 1]
       const { key, interval = 0, execution_time = 0, func } = nextQueueItem
 
-      const surplus = Math.round((execution_time - this.#now) / 1000)
+      const surplus = Math.round((execution_time - this._now) / 1000)
 
       if (!nextQueueItem) {
-        if (this.#debug) {
+        if (this._debug) {
           console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:`, `当前 无 任务`)
         }
         break
       }
 
       // 如果队列中有最近的任务
-      if (this.#debug) {
-        const _arr = Array.from(this.#queue, (item) => item.execution_time)
-        const _arr2 = Array.from(this.#queue, (item) => item.execution_time).sort((a, b) => b - a)
-        const _arr3 = Array.from(this.#queue, (item) => item.key)
+      if (this._debug) {
+        const _arr = Array.from(this._queue, (item) => item.execution_time)
+        const _arr2 = Array.from(this._queue, (item) => item.execution_time).sort((a, b) => b - a)
+        const _arr3 = Array.from(this._queue, (item) => item.key)
         console.log('\x1b[38;2;0;151;255m%c%s\x1b[0m', 'color:#0097ff;padding:16px 0;', `------->Breathe:队列keys`, JSON.stringify(_arr3))
         const isErr = JSON.stringify(_arr) !== JSON.stringify(_arr2)
         if (isErr) {
@@ -131,7 +131,7 @@ export class PrIntervalQueue {
    * @returns 创建时的计时器序列
    */
   startQueue = () => {
-    const timer = setInterval(this.#checkQueue, this.#interval)
+    const timer = setInterval(this.#checkQueue, this._interval)
     return timer
   }
 }
